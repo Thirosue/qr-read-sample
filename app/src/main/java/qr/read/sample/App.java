@@ -30,16 +30,17 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 public class App {
     public static void main(String[] args) {
         String input = "input4.pdf";
+        String tmp = "pdf.jpg";
 
         try {
-            Path path = Paths.get("pdf.jpg");
+            Path path = Paths.get(tmp);
             try (InputStream in = new FileInputStream(input);
                     OutputStream out = Files.newOutputStream(path);) {
                 rasterize(in, out);
             }
 
             //画像データを読み込む
-            BufferedImage image = ImageIO.read(new File("pdf.jpg"));
+            BufferedImage image = ImageIO.read(new File(tmp));
             LuminanceSource source = new BufferedImageLuminanceSource(image);
             Binarizer binarizer = new HybridBinarizer(source);
             BinaryBitmap bitmap = new BinaryBitmap(binarizer);
@@ -50,6 +51,7 @@ public class App {
             // (1)読み込んだイメージ
             Result result = reader.decode(bitmap);
 
+            System.out.println("----------------  read results");
             System.out.println(result.getText());
 
         } catch (NotFoundException e) {
